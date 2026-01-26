@@ -1,0 +1,318 @@
+\documentclass[10pt, letterpaper]{article}
+
+% Packages:
+\usepackage[
+    ignoreheadfoot, % set margins without considering header and footer
+    top=2 cm, % seperation between body and page edge from the top
+    bottom=2 cm, % seperation between body and page edge from the bottom
+    left=2 cm, % seperation between body and page edge from the left
+    right=2 cm, % seperation between body and page edge from the right
+    footskip=1.0 cm, % seperation between body and footer
+    % showframe % for debugging 
+]{geometry} % for adjusting page geometry
+\usepackage{titlesec} % for customizing section titles
+\usepackage{tabularx} % for making tables with fixed width columns
+\usepackage{array} % tabularx requires this
+\usepackage[dvipsnames]{xcolor} % for coloring text
+\definecolor{primaryColor}{RGB}{0, 79, 144} % define primary color
+\usepackage{enumitem} % for customizing lists
+\usepackage{fontawesome5} % for using icons
+\usepackage{amsmath} % for math
+\usepackage{enumitem}
+\usepackage[
+    pdftitle={John Doe's CV},
+    pdfauthor={John Doe},
+    pdfcreator={LaTeX with RenderCV},
+    colorlinks=false,
+    pdfborder={0 0 0},
+    % urlcolor=primaryColor
+]{hyperref} % for links, metadata and bookmarks
+\usepackage[pscoord]{eso-pic} % for floating text on the page
+\usepackage{calc} % for calculating lengths
+\usepackage{bookmark} % for bookmarks
+\usepackage{lastpage} % for getting the total number of pages
+\usepackage{changepage} % for one column entries (adjustwidth environment)
+\usepackage{paracol} % for two and three column entries
+\usepackage{ifthen} % for conditional statements
+\usepackage{needspace} % for avoiding page brake right after the section title
+\usepackage{iftex} % check if engine is pdflatex, xetex or luatex
+
+
+% Ensure that generate pdf is machine readable/ATS parsable:
+\ifPDFTeX
+    \input{glyphtounicode}
+    \pdfgentounicode=1
+    % \usepackage[T1]{fontenc} % this breaks sb2nov
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+\fi
+
+
+
+% Some settings:
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt} % remove space before adjustwidth environment
+\pagestyle{empty} % no header or footer
+\setcounter{secnumdepth}{0} % no section numbering
+\setlength{\parindent}{0pt} % no indentation
+\setlength{\topskip}{0pt} % no top skip
+\setlength{\columnsep}{0cm} % set column seperation
+\makeatletter
+\let\ps@customFooterStyle\ps@plain % Copy the plain style to customFooterStyle
+
+\makeatother
+\pagestyle{customFooterStyle}
+
+\titleformat{\section}{\needspace{4\baselineskip}\bfseries\large}{}{0pt}{}[\vspace{1pt}\titlerule]
+
+\titlespacing{\section}{
+    % left space:
+    -1pt
+}{
+    % top space:
+    0.3 cm
+}{
+    % bottom space:
+    0.2 cm
+} % section title spacing
+
+\renewcommand\labelitemi{$\circ$} % custom bullet points
+\newenvironment{highlights}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=0.4 cm + 10pt
+    ]
+}{
+    \end{itemize}
+} % new environment for highlights
+
+\newenvironment{highlightsforbulletentries}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=10pt
+    ]
+}{
+    \end{itemize}
+} % new environment for highlights for bullet entries
+
+
+\newenvironment{onecolentry}{
+    \begin{adjustwidth}{
+        0.2 cm + 0.00001 cm
+    }{
+        0.2 cm + 0.00001 cm
+    }
+}{
+    \end{adjustwidth}
+} % new environment for one column entries
+
+\newenvironment{twocolentry}[2][]{
+    \onecolentry
+    \def\secondColumn{#2}
+    \setcolumnwidth{\fill, 4.5 cm}
+    \begin{paracol}{2}
+}{
+    \switchcolumn \raggedleft \secondColumn
+    \end{paracol}
+    \endonecolentry
+} % new environment for two column entries
+
+\newenvironment{header}{
+    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.5}
+}{
+    \par\kern\topsep
+} % new environment for the header
+
+\newcommand{\placelastupdatedtext}{% \placetextbox{<horizontal pos>}{<vertical pos>}{<stuff>}
+  \AddToShipoutPictureFG*{% Add <stuff> to current page foreground
+    \put(
+        \LenToUnit{\paperwidth-2 cm-0.2 cm+0.05cm},
+        \LenToUnit{\paperheight-1.0 cm}
+    ){\vtop{{\null}\makebox[0pt][c]{
+    }}}%
+  }%
+}%
+
+% save the original href command in a new command:
+\let\hrefWithoutArrow\href
+
+% new command for external links:
+\renewcommand{\href}[2]{\hrefWithoutArrow{#1}{\ifthenelse{\equal{#2}{}}{ }{#2 }\raisebox{.15ex}{\footnotesize \faExternalLink*}}}
+
+
+\begin{document}
+    \newcommand{\AND}{\unskip
+        \cleaders\copy\ANDbox\hskip\wd\ANDbox
+        \ignorespaces
+    }
+    \newsavebox\ANDbox
+    \sbox\ANDbox{}
+
+    \placelastupdatedtext
+    \begin{header}
+        \textbf{\fontsize{24 pt}{24 pt}\selectfont Hanbin Zheng} % title
+
+        \vspace{0.3 cm}
+
+        \normalsize
+        \mbox{{\color{black}\footnotesize\faMapMarker*}\hspace*{0.13cm}Haining, Zhejiang} % address
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{mailto:hanbin.24@intl.zju.edu.cn}{\color{black}{\footnotesize\faEnvelope[regular]}\hspace*{0.13cm}hanbin.24@intl.zju.edu.cn}} % email
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{https://github.com/hanbinzheng}{\color{black}{\footnotesize\faGithub}\hspace*{0.13cm}hanbinzheng}} % github page
+        
+        \iffalse
+        
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{tel:+90-541-999-99-99}{\color{black}{\footnotesize\faPhone*}\hspace*{0.13cm}0541 999 99 99}}%
+        \kern 0.25 cm%
+        
+        
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{https://yourwebsite.com/}{\color{black}{\footnotesize\faLink}\hspace*{0.13cm}yourwebsite.com}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{https://linkedin.com/in/yourusername}{\color{black}{\footnotesize\faLinkedinIn}\hspace*{0.13cm}yourusername}}%
+        \kern 0.25 cm%
+
+
+        \fi
+    \end{header}
+
+    \vspace{0.3 cm - 0.3 cm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Education
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    \section{Education}
+
+    Dual degree program in Zhejiang University - University of Illinois Urbana-Champaign Institute:
+
+    \begin{twocolentry}{
+        Sep 2024 – Jun 2028
+      }
+      \textbf{University of Illinois Urbana-Champaign}, Illinois, US\\
+      BS in Computer Engineering, GPA: 4.0/4.0
+    \end{twocolentry}
+
+    \vspace{0.1cm}
+
+    \begin{twocolentry}{
+        Sep 2024 – Jun 2028
+      }
+      \textbf{Zhejiang University}, Zhejiang, China \\
+      BS in Electronic and Computer Engineering, GPA: 3.91/4.0
+    \end{twocolentry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Awards and Honors
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    \section{Awards and Honors}
+
+    \begin{twocolentry}{
+        2025.10 \\
+        2025.10 \\
+        2025.06 \\
+        2025.05
+      }
+      Zhejiang Provincial Scholarship \\
+      Zhejiang University Second Scholarship \\
+      First Prize in ZJU Mathematical Modeling Competition \\
+      Innovation Award in Concrete Dragon Boat Competition
+    \end{twocolentry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Research Experience
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    \section{Research Experience}
+
+    \begin{twocolentry}{Jun 2025 – Dec 2025}
+    \textbf{Undergraduate Researcher}, ZJUI
+    \end{twocolentry}
+    \vspace{0.05 cm}
+    \begin{onecolentry}
+      Advisor: \hrefWithoutArrow{https://zjui.intl.zju.edu.cn/node/2082}{\textbf{Prof. Xiangming Meng}}
+    \begin{highlights}
+    \item \href{https://github.com/hanbinzheng/flow-matching}{\textbf{Flow Models Exploration}} \\
+      Conducted an in-depth study of Flow Matching generative modeling, implementing conditional image generation on MNIST and CIFAR-10 from scratch.
+
+    \item \href{https://github.com/hanbinzheng/mf-img-denoising}{\textbf{MeanFlow for Image Inverse Problem}} \\
+      Investigated one-step generative modeling with the recently proposed MeanFlow models, altered its initial
+distribution from Gaussian distributions to noisy images, achieving efficient one-step denoising.
+
+    \item \href{https://github.com/hanbinzheng/naive-gmflow}{\textbf{GMFlow for Inverse Problem}} \\
+      Investigated Variational Flow Matching and Gaussian Mixture Flow Matching for image inverse problem; implemented 2D toy examples to validate our new algorithm.
+    \end{highlights}
+    \end{onecolentry}
+    \vspace{0.2 cm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% selected projects
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    \section{Selected Projects}
+
+    \begin{twocolentry}{Dec 2025 – Present}
+      \href{https://github.com/hanbinzheng/infantry}{\textbf{RoboMaster Infantry Robot Electrical Control System}}
+    \end{twocolentry}
+    \begin{onecolentry}
+      \begin{highlights}
+      \item \textbf{Embedded Control:} Developed real-time control system on STM32H723 for an omnidirectional infantry robot, managing high-frequency control loops and peripheral hardware integration.
+      \item \textbf{Orientation Estimation:} Independently derived \textbf{quaternion kinematics} and implemented the \textbf{Mahony Filter} from scratch for IMU sensor fusion, achieving stable orientation tracking.
+      \end{highlights}
+    \end{onecolentry}
+    \vspace{0.2cm}
+
+    \begin{twocolentry}{Nov 2025}
+      \href{https://github.com/hanbinzheng/little-shakespeare}{\textbf{Transformer Architecture Implementation From Scratch}}
+    \end{twocolentry}
+    \begin{onecolentry}
+      \begin{highlights}
+        \item \textbf{Neural Architecture:} Built a decoder-only Transformer from scratch using Pytorch.
+        \item \textbf{Mathematical Insight:} Analyzed dot-product attention as a \textbf{kernel-based fusion} mechanism, derived the interaction between \textbf{sinusoidal positional embeddings} and attention mechanisms, clarifying how relative distance is encoded into dot-product results.
+      \end{highlights}
+    \end{onecolentry}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Skills
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+        \section{Skills}
+
+        \begin{onecolentry}
+            \textbf{Programming Languages:} Python (PyTorch), C/C++, LaTeX % MATLAB, R, Rust, CUDA, ELisp
+        \end{onecolentry}
+        \vspace{0.1 cm}
+
+        \begin{onecolentry}
+          \textbf{Robotics:} STM32, Basic ROS2/ROS2 Control, Quaternion \& Euler Angles, Soldering
+        \end{onecolentry}
+        \vspace{0.1 cm}
+
+        \begin{onecolentry}
+            \textbf{Generative Modeling:} Flow Matching, MeanFlow, Diffusion, GMFlow, UNet/Transformer Architecture
+        \end{onecolentry}
+        \vspace{0.1 cm}
+
+        \begin{onecolentry}
+          \textbf{Development Tools:} Git, Linux, Makefile, Vim, Emacs (Doom Emacs)
+        \end{onecolentry}
+        \vspace{0.1cm}
+
+\end{document}
